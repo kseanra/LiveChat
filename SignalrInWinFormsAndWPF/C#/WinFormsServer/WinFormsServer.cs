@@ -24,7 +24,7 @@ namespace SignalRChat
     {
         private IDisposable SignalR { get; set; }
 
-        const string ServerURI = "http://A10876:8080";
+        const string ServerURI = "http://localhost:8088";
 
         internal WinFormsServer()
         {
@@ -124,7 +124,7 @@ namespace SignalRChat
 
                 var authorizeHubMethodInvocation = scope.Resolve<IAuthorizeHubMethodInvocation>();
 
-                //app.UseCors(CorsOptions.AllowAll);
+                app.UseCors(CorsOptions.AllowAll);
 
                 // Make long polling connections wait a maximum of 110 seconds for a
                 // response. When that time expires, trigger a timeout command and
@@ -183,7 +183,7 @@ namespace SignalRChat
 
             Program.MainForm.WriteToConsole("Client connected: " + Context.ConnectionId);
             string connectionId = Context.ConnectionId;
-            string user = Context.Headers["UserName"];
+            string user = Context.Headers["UserName"] != null ? Context.Headers["UserName"] : Context.QueryString["UserName"];
 
             if(adminlist.Where(x => x == user).Count() > 0)
             {
